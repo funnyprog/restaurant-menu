@@ -1,0 +1,17 @@
+.header {
+    display: flex;
+    align-items: center;
+
+    height: 75px;
+    background-color: #00B7FF;
+    font-size: 20px;
+
+    &-link {
+        color: green;
+        padding: 12px;
+
+        &__active {
+            color: red;
+        }
+    }
+}
