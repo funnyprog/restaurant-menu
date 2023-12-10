@@ -1,24 +1,10 @@
-import express from 'express'
+import {Router} from "express";
+import {userRouter} from './User/user'
+import {categoryRouter} from './Category/category'
+import {dishRouter} from './Dish/dish'
 
-const router = express.Router();
+export const apiRouter = Router();
 
-/* GET home page. */
-router.get(
-    '/',
-    function(req, res, next) {
-      res.render('index', { title: 'Express' });
-    });
-
-router.get(
-    '/test',
-    function(req, res, next) {
-      res.send('test page');
-    });
-
-router.get(
-    '/post',
-    function(req, res, next) {
-        res.send('post page');
-    });
-
-export default router;
+apiRouter.use('/user', userRouter)
+apiRouter.use('/dish', dishRouter)
+apiRouter.use('/category', categoryRouter)

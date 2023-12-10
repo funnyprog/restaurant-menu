@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Dish" ALTER COLUMN "weight" DROP NOT NULL,
+ALTER COLUMN "members" DROP NOT NULL;

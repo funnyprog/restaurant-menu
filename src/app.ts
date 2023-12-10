@@ -1,19 +1,38 @@
-import express from 'express'
+import express, {Application} from 'express'
 import path from 'path'
-import router from './routes/index'
-import userRouter from './routes/users'
+import passport from 'passport'
+import passportJwt, {ExtractJwt} from "passport-jwt";
+import {apiRouter} from './routes'
+import {ErrorMiddleware, JWT_TOKEN_SECRET} from "./config";
 
-const app = express();
+const app: Application = express();
+const JwtStrategy = passportJwt.Strategy;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', router);
-app.use('/users', userRouter);
+app.use(passport.initialize())
+passport.use(
+    new JwtStrategy(
+        {
+            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+            secretOrKey: JWT_TOKEN_SECRET
+        },
+        async (jwtPayload, done) => {
+            try {
+                done(null, jwtPayload);
+            } catch (error) {
+                done(error, false);
+            }
+        }
+    )
+);
 
-const server = app.listen(8000, () =>
-    console.log(`
-🚀 Server ready at: http://localhost:8000
-⭐️ See sample requests: http://pris.ly/e/ts/rest-express#3-using-the-rest-api`),
-)
+app.use('/api', apiRouter)
+
+app.use(ErrorMiddleware)
+
+const server = app.listen(8000, () => {
+    console.log(`Server ready at: http://localhost:8000`)
+})

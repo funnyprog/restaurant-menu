@@ -11,4 +11,25 @@ model User {
   id        Int     @id @default(autoincrement())
   email     String  @unique
   username  String
+  password  String
+}
+
+model Category {
+  id        Int         @id @default(autoincrement())
+  parentId  Int?
+  parent    Category?   @relation("CategoryChildren", fields: [parentId], references: [id])
+  children  Category[]  @relation("CategoryChildren")
+  slug      String
+  name      String
+  active    Boolean
+}
+
+model Dish {
+  id      Int       @id @default(autoincrement())
+  image   String?
+  title   String
+  price   Int
+  size    Int?
+  weight  Int?
+  members String?
 }
